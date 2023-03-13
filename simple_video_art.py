@@ -1,20 +1,21 @@
 import cv2 as cv
 
-video_file = 'data_PETS09-S2L1-raw.webm'
+video_file = 'example2.webm'
 
 video = cv.VideoCapture(video_file)
 
 if video.isOpened():
     fps = video.get(cv.CAP_PROP_FPS)
     wait_msec = int(1 / fps * 1000)
-
+    
     while True:
         valid, img = video.read()
         if not valid:
             break
 
-        edge = cv.Laplacian(img, -1)
-        edge = 255 - edge
+        h, w = img.shape[:2]
+        img2 = cv.resize(img, (w//2, h//2))
+        edge = 255 - cv.Laplacian(img2, -1)
         #img = cv.bitwise_and(img, edge)
         cv.imshow('Video Player', edge)
 
